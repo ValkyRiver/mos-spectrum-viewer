@@ -270,4 +270,4 @@ def mos(L=5, s=2, tetlimit=55, gen="bright", mode=3, Lstep=2, sstep=1):
 
 mos(5, 2, 55, "bright", 3, 2, 1)
 
-    
+root.mainloop()
