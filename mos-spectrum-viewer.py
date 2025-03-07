@@ -1,6 +1,6 @@
-# MOS Spectrum Viewer 1.5 by Valky River
+# MOS Spectrum Viewer 1.6 by Valky River
 
-version = "1.5"
+version = "1.6"
 
 from tkinter import *
 import math
@@ -32,7 +32,7 @@ textsize = 8
 root = Tk()
 C = Canvas(root)
 C.pack(fill=BOTH, expand=1)
-root.geometry(str(horizontalscale + horizontalbuffer*2) + "x" + str(verticalscale + verticalbuffer + 160))
+root.geometry(str(horizontalscale + horizontalbuffer*2) + "x" + str(verticalscale + verticalbuffer + 180))
 root.title("MOS Spectrum Viewer "+version)
 
 def mos(L=5, s=2, tetlimit=55, gen="bright", mode=3, Lstep=2, sstep=1):
@@ -141,13 +141,16 @@ def mos(L=5, s=2, tetlimit=55, gen="bright", mode=3, Lstep=2, sstep=1):
             C.create_line(horizontalbuffer, verticalbuffer + verticalscale-((verticalscale/(L+s))*note), horizontalbuffer+horizontalscale, verticalbuffer + verticalscale-((verticalscale/L)*collapseddegs[note]), fill=modecolor, width=3)
             
     # render tets
-    gensizes = []; gensizeamounts = []; nonmos = []
+    gensizes = []; gensizeamounts = []; nonmos = []; extreme = []
     for TET in range(1, tetlimit+1):
         draw = False
         hasgen = False
+        nonextreme = False
         for step in range(TET+1):
             if round((1200 / TET) * step, 8) >= round(lowerlimit, 8) and round((1200 / TET) * step, 8) <= round(upperlimit, 8) and TET % math.gcd(L, s) == 0:
                 hasgen = True
+                if round((1200 / TET) * step, 8) != round(lowerlimit, 8) and round((1200 / TET) * step, 8) != round(upperlimit, 8):
+                    nonextreme = True
                 if round((1200 / TET) * step, 8) in gensizes:
                     gensizeamounts[gensizes.index(round((1200 / TET) * step, 8))] += 1
                     x = horizontalscale*((((1200 / TET) * step)-lowerlimit)/(upperlimit-lowerlimit)) + horizontalbuffer
@@ -176,12 +179,18 @@ def mos(L=5, s=2, tetlimit=55, gen="bright", mode=3, Lstep=2, sstep=1):
                         C.create_oval(x - 3, (verticalscale/TET)*step1 + verticalbuffer + 3, x + 3, (verticalscale/TET)*step1 + verticalbuffer - 3, fill="#445")
         if not hasgen:
             nonmos.append(str(TET))
+        if hasgen and not nonextreme:
+            extreme.append(str(TET))
     C.create_text(horizontalbuffer + horizontalscale/2, verticalscale + verticalbuffer + textsize*12, text="TETs with more than one valid generator are suffixed with b or # (~ for mids)", font=("Arial", textsize, "bold"))
     C.create_text(horizontalbuffer + horizontalscale/2, verticalscale + verticalbuffer + textsize*13.7, text="TETs in green are multiples of lower TETs that share the same generator", font=("Arial", textsize, "bold"))
-    if len(nonmos) == 0:
-        C.create_text(horizontalbuffer + horizontalscale/2, verticalscale + verticalbuffer + textsize*15.4, text="TETs without "+str(L)+"L "+str(s)+"s: none", font=("Arial", textsize, "bold"))
+    if len(extreme) == 0:
+        C.create_text(horizontalbuffer + horizontalscale/2, verticalscale + verticalbuffer + textsize*15.4, text="TETs with only extreme "+str(L)+"L "+str(s)+"s: none", font=("Arial", textsize, "bold"))
     else:
-        C.create_text(horizontalbuffer + horizontalscale/2, verticalscale + verticalbuffer + textsize*15.4, text="TETs without "+str(L)+"L "+str(s)+"s: "+", ".join(nonmos), font=("Arial", textsize, "bold"))
+        C.create_text(horizontalbuffer + horizontalscale/2, verticalscale + verticalbuffer + textsize*15.4, text="TETs with only extreme "+str(L)+"L "+str(s)+"s: "+", ".join(extreme), font=("Arial", textsize, "bold"))
+    if len(nonmos) == 0:
+        C.create_text(horizontalbuffer + horizontalscale/2, verticalscale + verticalbuffer + textsize*17.1, text="TETs without "+str(L)+"L "+str(s)+"s: none", font=("Arial", textsize, "bold"))
+    else:
+        C.create_text(horizontalbuffer + horizontalscale/2, verticalscale + verticalbuffer + textsize*17.1, text="TETs without "+str(L)+"L "+str(s)+"s: "+", ".join(nonmos), font=("Arial", textsize, "bold"))
         
     # render menu 
     
