@@ -1,11 +1,66 @@
-# MOS Spectrum Viewer 1.6 by Valky River
+# MOS Spectrum Viewer 1.7 by Valky River
 
-version = "1.6"
+version = "1.7"
 
 from tkinter import *
 import math
 import colorsys
 import winsound
+
+tamnams = {
+    "1L 1s": "monowood",
+    
+    "1L 2s": "antrial",
+    "2L 1s": "trial",
+    
+    "1L 3s": "antetric",
+    "2L 2s": "biwood",
+    "3L 1s": "tetric",
+    
+    "1L 4s": "pedal",
+    "2L 3s": "pentic",
+    "3L 2s": "antipentic",
+    "4L 1s": "manual",
+
+    "1L 5s": "antimachinoid",
+    "2L 4s": "malic",
+    "3L 3s": "triwood",
+    "4L 2s": "citric",
+    "5L 1s": "machinoid",
+
+    "1L 6s": "onyx",
+    "2L 5s": "antidiatonic",
+    "3L 4s": "mosh",
+    "4L 3s": "smitonic",
+    "5L 2s": "diatonic",
+    "6L 1s": "archæotonic",
+
+    "1L 7s": "antipine",
+    "2L 6s": "subaric",
+    "3L 5s": "checkertonic",
+    "4L 4s": "tetrawood",
+    "5L 3s": "oneirotonic",
+    "6L 2s": "ekic",
+    "7L 1s": "pine",
+
+    "1L 8s": "antisubneutralic",
+    "2L 7s": "balzano",
+    "3L 6s": "tcherepin",
+    "4L 5s": "gramitonic",
+    "5L 4s": "semiquartal",
+    "6L 3s": "hyrulic",
+    "7L 2s": "armotonic",
+    "8L 1s": "subneutralic",
+
+    "1L 9s": "antisinatonic",
+    "2L 8s": "jaric",
+    "3L 7s": "sephiroid",
+    "4L 6s": "lime",
+    "5L 5s": "pentawood",
+    "6L 4s": "lemon",
+    "7L 3s": "dicoid",
+    "8L 2s": "taric",
+    "9L 1s": "sinatonic"}
 
 def beep(mode, L, s, Lstep, sstep):
     current = 0
@@ -26,7 +81,7 @@ def invertgen(gen):
 horizontalscale = 1440
 verticalscale = 480
 horizontalbuffer = 60
-verticalbuffer = 120
+verticalbuffer = 130
 textsize = 8
 
 root = Tk()
@@ -98,8 +153,10 @@ def mos(L=5, s=2, tetlimit=55, gen="bright", mode=3, Lstep=2, sstep=1):
 
     # render left side cents
     C.create_polygon(0,0,0,verticalscale+360,horizontalscale + 480,verticalscale+360,horizontalscale + 480,0, outline="#FFF", fill="#FFF", width=0)
-    C.create_text(horizontalbuffer + horizontalscale - 8.3*textsize, verticalbuffer - 12*textsize, text="MOS Spectrum Viewer "+version, font=("Arial", int(textsize), "bold"))
-    C.create_text(horizontalbuffer + horizontalscale - 4.3*textsize, verticalbuffer - 10.4*textsize, text="by Valky River", font=("Arial", int(textsize), "bold"))
+    C.create_text(horizontalbuffer + horizontalscale - 8.3*textsize, 2.4*textsize, text="MOS Spectrum Viewer "+version, font=("Arial", int(textsize), "bold"))
+    C.create_text(horizontalbuffer + horizontalscale - 4.3*textsize, 4*textsize, text="by Valky River", font=("Arial", int(textsize), "bold"))
+    if L + s <= 10:
+        C.create_text(horizontalbuffer + horizontalscale - (len(tamnams[(str(L)+"L "+str(s)+"s")])*0.44)*textsize - 5.4*textsize, verticalbuffer - 8.1*textsize, text="TAMNAMS name: "+tamnams[(str(L)+"L "+str(s)+"s")], font=("Consolas", int(1.2*textsize), "bold"))
     C.create_text(horizontalbuffer + horizontalscale - 13.8*textsize, verticalbuffer - 5*textsize, text=str(L)+"L "+str(s)+"s SPECTRUM", font=("Arial", int(2.5*textsize), "bold"))
     C.create_text(horizontalbuffer + horizontalscale/2, verticalbuffer - 4.2*textsize, text="Size of generator (cents)", font=("Arial", int(1.5*textsize), "bold"))
     C.create_text(horizontalbuffer + horizontalscale/2, verticalscale + verticalbuffer + textsize*9.6, text="TETs (up to "+str(tetlimit)+")", font=("Arial", int(1.5*textsize), "bold"))
