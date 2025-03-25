@@ -60,7 +60,8 @@ tamnams = {
     "6L 4s": "lemon",
     "7L 3s": "dicoid",
     "8L 2s": "taric",
-    "9L 1s": "sinatonic"}
+    "9L 1s": "sinatonic",
+}
 
 def beep(mode, L, s, Lstep, sstep):
     current = 0
@@ -157,7 +158,12 @@ def mos(L=5, s=2, tetlimit=55, gen="bright", mode=3, Lstep=2, sstep=1):
     C.create_text(horizontalbuffer + horizontalscale - 4.3*textsize, 4*textsize, text="by Valky River", font=("Arial", int(textsize), "bold"))
     if L + s <= 10:
         C.create_text(horizontalbuffer + horizontalscale - (len(tamnams[(str(L)+"L "+str(s)+"s")])*0.44)*textsize - 5.4*textsize, verticalbuffer - 8.1*textsize, text="TAMNAMS name: "+tamnams[(str(L)+"L "+str(s)+"s")], font=("Consolas", int(1.2*textsize), "bold"))
-    C.create_text(horizontalbuffer + horizontalscale - 13.8*textsize, verticalbuffer - 5*textsize, text=str(L)+"L "+str(s)+"s SPECTRUM", font=("Arial", int(2.5*textsize), "bold"))
+    Ldisp = 0; sdisp = 0
+    if L >= 10:
+        Ldisp = 1
+    if s >= 10:
+        sdisp = 1
+    C.create_text(horizontalbuffer + horizontalscale - (13.8 + Ldisp + sdisp)*textsize, verticalbuffer - 5*textsize, text=str(L)+"L "+str(s)+"s SPECTRUM", font=("Arial", int(2.5*textsize), "bold"))
     C.create_text(horizontalbuffer + horizontalscale/2, verticalbuffer - 4.2*textsize, text="Size of generator (cents)", font=("Arial", int(1.5*textsize), "bold"))
     C.create_text(horizontalbuffer + horizontalscale/2, verticalscale + verticalbuffer + textsize*9.6, text="TETs (up to "+str(tetlimit)+")", font=("Arial", int(1.5*textsize), "bold"))
     C.create_text(horizontalbuffer-42, verticalbuffer + verticalscale/2, text="Interval size (in cents)", font=("Arial", int(1.5*textsize), "bold"), angle = 90, fill="#CCC")
